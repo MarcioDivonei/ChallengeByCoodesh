@@ -21,11 +21,13 @@ namespace GeradorTxt
                 Console.WriteLine("1. Configurar arquivo .json (base de dados)");
                 Console.WriteLine("2. Configurar diretório de output");
                 Console.WriteLine("3. Gerar arquivo");
+                Console.WriteLine("4. Gerar exemplos dos leiautes");
                 Console.WriteLine("0. Sair");
                 Console.Write("Opção: ");
 
                 var opt = Console.ReadLine();
                 Console.WriteLine();
+                Console.Clear();
 
                 switch (opt)
                 {
@@ -40,7 +42,9 @@ namespace GeradorTxt
                     case "3":
                         GerarArquivo();
                         break;
-
+                    case "4":
+                        GerarExemplos();
+                        break;
                     case "0":
                         return;
 
@@ -48,6 +52,9 @@ namespace GeradorTxt
                         Console.WriteLine("Opção inválida.");
                         break;
                 }
+                Console.WriteLine("\n\nPressione qualquer tecla para continuar.");
+                Console.ReadKey();
+                Console.Clear();
             }
         }
         private static void ConfigurarCaminhoJson()
@@ -58,6 +65,7 @@ namespace GeradorTxt
             {
                 _jsonPath = jp;
                 Console.WriteLine("OK! JSON configurado: " + _jsonPath);
+
             }
             else
             {
@@ -81,13 +89,11 @@ namespace GeradorTxt
         }
         private static void GerarArquivo()
         {
-            Console.Write("Gerar arquivo");
             try
             {
                 Console.WriteLine("Escolha a versão do leiaute:");
                 Console.WriteLine("1 - Leiaute 01");
                 Console.WriteLine("2 - Leiaute 02");
-                Console.WriteLine("3 - Ver exemplos");
                 var escolha = Console.ReadLine();
 
                 IGeradorArquivo gerador = null;
@@ -101,10 +107,6 @@ namespace GeradorTxt
                     case "2":
                         gerador = new GeradorArquivoVersao2();
                         break;
-
-                    case "3":
-                        GerarExemplos();
-                        return;
 
                     default:
                         Console.WriteLine("Opção inválida. Digite 1, 2 ou 3.");
@@ -126,12 +128,14 @@ namespace GeradorTxt
         }
         static void GerarExemplos()
         {
+            Console.WriteLine("Somente para base-dados e base-dados-v2");
             Console.WriteLine("Exemplo Leiaute 01:");
             Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
             Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
             Console.WriteLine("02|DESCRIÇÃOITEM|VALORITEM");
             Console.WriteLine("99|QUANTIDADELINHASDOTIPO\n");
 
+            Console.WriteLine("Somente para base-dados-v2");
             Console.WriteLine("Exemplo Leiaute 02:");
             Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
             Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
