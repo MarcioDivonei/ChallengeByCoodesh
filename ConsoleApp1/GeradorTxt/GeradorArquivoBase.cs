@@ -11,7 +11,7 @@ namespace GeradorTxt
     /// IMPORTANTE: métodos NÃO marcados como virtual de propósito.
     /// O candidato deve decidir onde permitir override para suportar versões futuras.
     /// </summary>
-    public class GeradorArquivoBase
+    public class GeradorArquivoBase : IGera
     {
         public void Gerar(List<Empresa> empresas, string outputPath)
         {
