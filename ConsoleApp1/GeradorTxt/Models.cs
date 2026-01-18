@@ -23,6 +23,7 @@ namespace GeradorTxt
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
         public int NumeroItem { get; set; }
+        public List<CategoriaItem> Categorias { get; set; }
     }
     public class CategoriaItem
     {

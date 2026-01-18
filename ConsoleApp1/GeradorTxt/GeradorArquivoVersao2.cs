@@ -1,30 +1,31 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GeradorTxt
 {
-    /// <summary>
-    /// Implementa a geração do Leiaute 1.
-    /// IMPORTANTE: métodos NÃO marcados como virtual de propósito.
-    /// O candidato deve decidir onde permitir override para suportar versões futuras.
-    /// </summary>
-    public class GeradorArquivoBase : IGeradorArquivo
+    public class GeradorArquivoVersao2 : IGeradorArquivo
     {
         public void Gerar(List<Empresa> empresas, string outputPath)
         {
             var sb = new StringBuilder();
             foreach (var emp in empresas)
             {
-                EscreverTipo00(sb, emp);
+                EscreverTipo00(sb, emp); //Empresa
                 foreach (var doc in emp.Documentos)
                 {
-                    EscreverTipo01(sb, doc);
+                    EscreverTipo01(sb, doc);//Documento
                     foreach (var item in doc.Itens)
                     {
-                        EscreverTipo02(sb, item);
+                        EscreverTipo02(sb, item);//ItemDocumento
+                        foreach (var cat in item.Categorias)
+                        {
+                            EscreverTipo03(sb, cat);
+                        }
                     }
                 }
             }
@@ -57,10 +58,19 @@ namespace GeradorTxt
 
         protected void EscreverTipo02(StringBuilder sb, ItemDocumento item)
         {
-            // 02|DESCRICAOITEM|VALORITEM
+            // 02|NUMEROITEM|DESCRICAOITEM|VALORITEM
             sb.Append("02").Append("|")
+              .Append(item.NumeroItem).Append("|")
               .Append(item.Descricao).Append("|")
               .Append(ToMoney(item.Valor)).AppendLine();
         }
+        protected void EscreverTipo03(StringBuilder sb, CategoriaItem cat) 
+        {
+            // 03|NUMEROCATEGORIA|DESCRICAOCATEGORIA
+            sb.Append("03").Append("|")
+              .Append(cat.NumeroCategoria).Append("|")
+              .Append(cat.Descricao).AppendLine();
+        }
     }
 }
+

@@ -84,22 +84,60 @@ namespace GeradorTxt
             Console.Write("Gerar arquivo");
             try
             {
-                var gerador = new GeradorArquivoBase();
+                Console.WriteLine("Escolha a versão do leiaute:");
+                Console.WriteLine("1 - Leiaute 01");
+                Console.WriteLine("2 - Leiaute 02");
+                Console.WriteLine("3 - Ver exemplos");
+                var escolha = Console.ReadLine();
+
+                IGeradorArquivo gerador = null;
+
+                switch (escolha)
+                {
+                    case "1":
+                        gerador = new GeradorArquivoBase();
+                        break;
+
+                    case "2":
+                        gerador = new GeradorArquivoVersao2();
+                        break;
+
+                    case "3":
+                        GerarExemplos();
+                        return;
+
+                    default:
+                        Console.WriteLine("Opção inválida. Digite 1, 2 ou 3.");
+                        return;
+                }
 
                 var dados = JsonRepository.LoadEmpresas(_jsonPath);
-
-                var fileName = $"saida_leiaute_versão 01_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
-
+                var fileName = $"saida_leiaute_{escolha}_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
                 var fullPath = Path.Combine(_outputDir, fileName);
 
                 gerador.Gerar(dados, fullPath);
-
                 Console.WriteLine("Arquivo gerado em: " + fullPath);
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Erro ao gerar arquivo: " + ex.Message);
             }
+        }
+        static void GerarExemplos()
+        {
+            Console.WriteLine("Exemplo Leiaute 01:");
+            Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
+            Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
+            Console.WriteLine("02|DESCRIÇÃOITEM|VALORITEM");
+            Console.WriteLine("99|QUANTIDADELINHASDOTIPO\n");
+
+            Console.WriteLine("Exemplo Leiaute 02:");
+            Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
+            Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
+            Console.WriteLine("02|NUMEROITEM|DESCRIÇÃOITEM|VALORITEM");
+            Console.WriteLine("03|NUMEROCATEGORIA|DESCRIÇÃOCATEGORIA");            
+            Console.WriteLine("99|QUANTIDADELINHASDOTIPO\n");
         }
     }
 }
