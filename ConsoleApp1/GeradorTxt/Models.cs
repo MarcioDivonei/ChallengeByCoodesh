@@ -27,7 +27,7 @@ namespace GeradorTxt
     }
     public class CategoriaItem
     {
-        public int NumeroCategoria { get; set; }
-        public string Descricao { get; set; }
+        public int numeroCategoria { get; set; }
+        public string descricaoCategoria { get; set; }
     }
 }

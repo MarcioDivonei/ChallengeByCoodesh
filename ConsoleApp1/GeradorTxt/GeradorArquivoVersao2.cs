@@ -18,6 +18,10 @@ namespace GeradorTxt
                 EscreverTipo00(sb, emp); //Empresa
                 foreach (var doc in emp.Documentos)
                 {
+                    if (doc.Itens.Sum(i => i.Valor) != doc.Valor)
+                    {
+                        throw new Exception($"Documento {doc.Numero} da empresa {emp.Nome} possui soma de itens divergente.");
+                    }
                     EscreverTipo01(sb, doc);//Documento
                     foreach (var item in doc.Itens)
                     {
@@ -68,8 +72,8 @@ namespace GeradorTxt
         {
             // 03|NUMEROCATEGORIA|DESCRICAOCATEGORIA
             sb.Append("03").Append("|")
-              .Append(cat.NumeroCategoria).Append("|")
-              .Append(cat.Descricao).AppendLine();
+              .Append(cat.numeroCategoria).Append("|")
+              .Append(cat.descricaoCategoria).AppendLine();
         }
     }
 }

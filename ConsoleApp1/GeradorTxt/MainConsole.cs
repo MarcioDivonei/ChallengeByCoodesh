@@ -117,6 +117,8 @@ namespace GeradorTxt
                 var fileName = $"saida_leiaute_{escolha}_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
                 var fullPath = Path.Combine(_outputDir, fileName);
 
+
+
                 gerador.Gerar(dados, fullPath);
                 Console.WriteLine("Arquivo gerado em: " + fullPath);
 
