@@ -13,9 +13,11 @@ namespace GeradorTxt
         public void Gerar(List<Empresa> empresas, string outputPath)
         {
             var sb = new StringBuilder();
+            int linhas00 = 0, linhas01 = 0, linhas02 = 0, linhas03 = 0;
             foreach (var emp in empresas)
             {
                 EscreverTipo00(sb, emp); //Empresa
+                linhas00++;
                 foreach (var doc in emp.Documentos)
                 {
                     if (doc.Itens.Sum(i => i.Valor) != doc.Valor)
@@ -23,16 +25,26 @@ namespace GeradorTxt
                         throw new Exception($"Documento {doc.Numero} da empresa {emp.Nome} possui soma de itens divergente.");
                     }
                     EscreverTipo01(sb, doc);//Documento
+                    linhas01++;
                     foreach (var item in doc.Itens)
                     {
                         EscreverTipo02(sb, item);//ItemDocumento
+                        linhas02++;
                         foreach (var cat in item.Categorias)
                         {
                             EscreverTipo03(sb, cat);
+                            linhas03++;
                         }
                     }
                 }
             }
+            sb.AppendLine($"09|00|{linhas00}");
+            sb.AppendLine($"09|01|{linhas01}");
+            sb.AppendLine($"09|02|{linhas02}");
+            sb.AppendLine($"09|03|{linhas03}");
+            int totalLinhas = linhas00 + linhas01 + linhas02 + linhas03;
+            sb.AppendLine($"99|{totalLinhas}");
+            
             File.WriteAllText(outputPath, sb.ToString(), Encoding.UTF8);
         }
 

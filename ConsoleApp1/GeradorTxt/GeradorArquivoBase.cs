@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace GeradorTxt
@@ -15,19 +16,32 @@ namespace GeradorTxt
     {
         public void Gerar(List<Empresa> empresas, string outputPath)
         {
+            int linhas00 = 0, linhas01 = 0, linhas02 = 0;
             var sb = new StringBuilder();
             foreach (var emp in empresas)
             {
                 EscreverTipo00(sb, emp);
+                linhas00++;
                 foreach (var doc in emp.Documentos)
                 {
+                    if (doc.Itens.Sum(i => i.Valor) != doc.Valor)
+                    {
+                        throw new Exception($"Documento {doc.Numero} da empresa {emp.Nome} possui soma de itens divergente.");
+                    }
                     EscreverTipo01(sb, doc);
+                    linhas01++;
                     foreach (var item in doc.Itens)
                     {
                         EscreverTipo02(sb, item);
+                        linhas02++;
                     }
                 }
             }
+            sb.AppendLine($"09|00|{linhas00}");
+            sb.AppendLine($"09|01|{linhas01}");
+            sb.AppendLine($"09|02|{linhas02}");
+            int totalLinhas = linhas00 + linhas01 + linhas02;
+            sb.AppendLine($"99|{totalLinhas}");
             File.WriteAllText(outputPath, sb.ToString(), Encoding.UTF8);
         }
 
