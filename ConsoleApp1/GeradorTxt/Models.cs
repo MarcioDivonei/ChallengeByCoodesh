@@ -22,5 +22,11 @@ namespace GeradorTxt
     {
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
+        public int NumeroItem { get; set; }
+    }
+    public class CategoriaItem
+    {
+        public int NumeroCategoria { get; set; }
+        public string Descricao { get; set; }
     }
 }
