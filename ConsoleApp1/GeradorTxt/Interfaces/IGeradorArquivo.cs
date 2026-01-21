@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using GeradorTxt.Domain;
 
-namespace GeradorTxt
+namespace GeradorTxt.Interfaces
 {
     public interface IGeradorArquivo
     {

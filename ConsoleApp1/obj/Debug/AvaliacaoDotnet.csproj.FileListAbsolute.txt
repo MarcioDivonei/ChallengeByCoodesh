@@ -12,7 +12,6 @@ C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\bin\Debug\ConsoleApp1.exe
 C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\bin\Debug\ConsoleApp1.pdb
 C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\obj\Debug\AvaliacaoDotnet.csproj.AssemblyReference.cache
-C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\obj\Debug\ConsoleApp1.exe.config
 C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\obj\Debug\AvaliacaoDotnet.csproj.CoreCompileInputs.cache
 C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\obj\Debug\Avaliaca.6893F418.Up2Date
 C:\Users\Marcio\OneDrive\Desktop\Benner\ConsoleApp1\obj\Debug\ConsoleApp1.exe

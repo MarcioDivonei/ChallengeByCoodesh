@@ -1,37 +1,20 @@
+using GeradorTxt.Interfaces;
+using GeradorTxt.Domain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
+
 namespace GeradorTxt
 {
-    /// <summary>
-    /// Lê o arquivo JSON sem depender de pacotes externos (usa JavaScriptSerializer).
-    /// </summary>
-    public static class JsonRepository
+    public class JsonEmpresaRepository : IEmpresaRepository
     {
-        public static List<Empresa> LoadEmpresas(string jsonPath)
+        public List<Empresa> Carregar(string path)
         {
-            if (!File.Exists(jsonPath))
-                throw new FileNotFoundException("Arquivo JSON não encontrado.", jsonPath);
-
-            try
-            {
-                var json = File.ReadAllText(jsonPath);
-
-                // Desserializa diretamente para a lista de empresas
-                var empresas = JsonConvert.DeserializeObject<List<Empresa>>(json);
-
-                if (empresas == null)
-                    throw new Exception("O JSON não contém dados de empresas válidos.");
-
-                return empresas;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Falha ao desserializar JSON. " +
-                    "Garanta que o arquivo está no formato esperado. Detalhes: " + ex.Message, ex);
-            }
+            var json = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<List<Empresa>>(json);
         }
+
     }
 }

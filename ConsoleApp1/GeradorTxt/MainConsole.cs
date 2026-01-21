@@ -1,149 +1,152 @@
+using GeradorTxt.GeradorLeiaute;
+using GeradorTxt;
+using GeradorTxt.Interfaces;
 using System;
 using System.IO;
 
 namespace GeradorTxt
 {
-    /// <summary>
-    /// Responsável por interagir com o usuário via console.
-    /// </summary>
     public static class MainConsole
     {
-        private static string _jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "base-dados.json");
+        private static string _jsonPath1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "base-dados-1.json");
+        private static string _jsonPath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data", "base-dados-2.json");
         private static string _outputDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "out");
 
         public static void Run()
         {
             Directory.CreateDirectory(_outputDir);
+
             while (true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Menu");
-                Console.WriteLine("1. Configurar arquivo .json (base de dados)");
-                Console.WriteLine("2. Configurar diretório de output");
-                Console.WriteLine("3. Gerar arquivo");
-                Console.WriteLine("4. Gerar exemplos dos leiautes");
-                Console.WriteLine("0. Sair");
+                Console.WriteLine("\nMenu");
+                Console.WriteLine("1 - Configurar arquivos JSON (entrada)");
+                Console.WriteLine("2 - Configurar diretório de saída");
+                Console.WriteLine("3 - Gerar arquivo TXT");
+                Console.WriteLine("4 - Exibir exemplos dos leiautes");
+                Console.WriteLine("0 - Sair");
                 Console.Write("Opção: ");
 
-                var opt = Console.ReadLine();
-                Console.WriteLine();
+                var opcao = Console.ReadLine();
                 Console.Clear();
 
-                switch (opt)
+                switch (opcao)
                 {
                     case "1":
-                        ConfigurarCaminhoJson();
+                        ConfigurarJsonEntrada();
                         break;
-
                     case "2":
-                        ConfigurarSaidaTxt();
+                        ConfigurarSaida();
                         break;
-
                     case "3":
                         GerarArquivo();
                         break;
                     case "4":
-                        GerarExemplos();
+                        MostrarExemplos();
                         break;
                     case "0":
                         return;
-
                     default:
                         Console.WriteLine("Opção inválida.");
                         break;
                 }
-                Console.WriteLine("\n\nPressione qualquer tecla para continuar.");
-                Console.ReadKey();
-                Console.Clear();
             }
         }
-        private static void ConfigurarCaminhoJson()
-        {
-            Console.Write("Informe o caminho completo do arquivo .json: ");
-            var jp = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(jp) && File.Exists(jp))
-            {
-                _jsonPath = jp;
-                Console.WriteLine("OK! JSON configurado: " + _jsonPath);
 
-            }
-            else
-            {
-                Console.WriteLine("Caminho inválido ou arquivo não encontrado.");
-            }
-        }
-        private static void ConfigurarSaidaTxt()
+        private static void ConfigurarJsonEntrada()
         {
-            Console.Write("Informe o diretório de saída para o .txt: ");
-            var od = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(od))
+            Console.Write("Informe o caminho do JSON 1: ");
+            var p1 = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(p1) && File.Exists(p1))
+                _jsonPath1 = p1;
+
+            Console.Write("Informe o caminho do JSON 2: ");
+            var p2 = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(p2) && File.Exists(p2))
+                _jsonPath2 = p2;
+
+            Console.WriteLine("Arquivos JSON configurados com sucesso.");
+        }
+
+
+        private static void ConfigurarSaida()
+        {
+            Console.Write("Informe o diretório de saída: ");
+            var dir = Console.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(dir))
             {
-                _outputDir = od;
+                _outputDir = dir;
                 Directory.CreateDirectory(_outputDir);
-                Console.WriteLine("OK! Diretório de saída configurado: " + _outputDir);
             }
-            else
-            {
-                Console.WriteLine("Diretório inválido.");
-            }
+
+            Console.WriteLine("Diretório de saída configurado.");
         }
         private static void GerarArquivo()
         {
+            Console.Write("Escolha o leiaute (1 ou 2): ");
+            var leiaute = Console.ReadLine();
+
+            IGeradorLeiaute factory = new GeradorLeiauteFactory();
+
+            IGeradorArquivo gerador;
             try
             {
-                Console.WriteLine("Escolha a versão do leiaute:");
-                Console.WriteLine("1 - Leiaute 01");
-                Console.WriteLine("2 - Leiaute 02");
-                var escolha = Console.ReadLine();
-
-                IGeradorArquivo gerador = null;
-
-                switch (escolha)
-                {
-                    case "1":
-                        gerador = new GeradorArquivoBase();
-                        break;
-
-                    case "2":
-                        gerador = new GeradorArquivoVersao2();
-                        break;
-
-                    default:
-                        Console.WriteLine("Opção inválida. Digite 1, 2 ou 3.");
-                        return;
-                }
-
-                var dados = JsonRepository.LoadEmpresas(_jsonPath);
-                var fileName = $"saida_leiaute_{escolha}_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
-                var fullPath = Path.Combine(_outputDir, fileName);
-
-
-
-                gerador.Gerar(dados, fullPath);
-                Console.WriteLine("Arquivo gerado em: " + fullPath);
-
+                gerador = factory.Criar(leiaute);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine("Erro ao gerar arquivo: " + ex.Message);
+                Console.WriteLine("Leiaute inválido");
+                return;
             }
-        }
-        static void GerarExemplos()
-        {
-            Console.WriteLine("Somente para base-dados e base-dados-v2");
-            Console.WriteLine("Exemplo Leiaute 01:");
-            Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
-            Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
-            Console.WriteLine("02|DESCRIÇÃOITEM|VALORITEM");
-            Console.WriteLine("99|QUANTIDADELINHASDOTIPO\n");
+                
 
-            Console.WriteLine("Somente para base-dados-v2");
-            Console.WriteLine("Exemplo Leiaute 02:");
+            Console.Write("Qual JSON deseja usar? (1 ou 2): ");
+            var jsonEscolhido = Console.ReadLine();
+            string jsonPath;
+        
+            switch (jsonEscolhido)
+            {
+                case "1":
+                    jsonPath = _jsonPath1;
+                    break;
+
+                case "2":
+                    jsonPath = _jsonPath2;
+                    break;
+
+                default:
+                    Console.WriteLine("Escreva uma opção válida");
+                    return;
+            }
+
+            var repo = new JsonEmpresaRepository();
+            var empresas = repo.Carregar(jsonPath);
+
+            var fileName = $"saida_leiaute_{leiaute}_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+            var fullPath = Path.Combine(_outputDir, fileName);
+
+            gerador.Gerar(empresas, fullPath);
+
+            Console.WriteLine("Arquivo gerado com sucesso:");
+            Console.WriteLine(fullPath);
+        }
+
+          private static void MostrarExemplos()
+        {
+            Console.WriteLine("=== Exemplo Leiaute 01 ===");
             Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
             Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
-            Console.WriteLine("02|NUMEROITEM|DESCRIÇÃOITEM|VALORITEM");
-            Console.WriteLine("03|NUMEROCATEGORIA|DESCRIÇÃOCATEGORIA");            
-            Console.WriteLine("99|QUANTIDADELINHASDOTIPO\n");
+            Console.WriteLine("02|NUMEROITEM|DESCRICAOITEM|VALORITEM");
+            Console.WriteLine("09|TIPO|QTD");
+            Console.WriteLine("99|TOTAL_LINHAS\n");
+
+            Console.WriteLine("=== Exemplo Leiaute 02 ===");
+            Console.WriteLine("00|CNPJEMPRESA|NOMEDAEMPRESA|TELEFONE");
+            Console.WriteLine("01|MODELODOCUMENTO|NUMERODOCUMENTO|VALORDOCUMENTO");
+            Console.WriteLine("02|NUMEROITEM|DESCRICAOITEM|VALORITEM");
+            Console.WriteLine("03|NUMEROCATEGORIA|DESCRICAOCATEGORIA");
+            Console.WriteLine("09|TIPO|QTD");
+            Console.WriteLine("99|TOTAL_LINHAS\n");
         }
     }
 }
