@@ -55,7 +55,7 @@
     <Compile Include="GeradorTxt\Interfaces\IEmpresaRepository.cs" />
     <Compile Include="GeradorTxt\Interfaces\IGeradorArquivo.cs" />
     <Compile Include="GeradorTxt\Interfaces\IGeradorLeiaute.cs" />
-    <Compile Include="GeradorTxt\Interfaces\ValidadorLeiaute.cs" />
+    <Compile Include="GeradorTxt\Interfaces\IValidadorLeiaute.cs" />
     <Compile Include="GeradorTxt\Services\GeradorArquivoLeiaute01.cs" />
     <Compile Include="GeradorTxt\Services\GeradorArquivoLeiaute02.cs" />
     <Compile Include="GeradorTxt\Validadores\DocumentoValidador.cs" />
